@@ -1,0 +1,12 @@
+# Faculty review Q&A (adapt with your own measured results)
+- **Problem?** Patients/clinicians struggle to find and trust specific facts in long reports; plain LLMs hallucinate and cannot cite.
+- **Why RAG, not fine-tuning?** Reports are private and change per user; RAG needs no retraining, gives traceable sources, and updates by re-indexing. Fine-tuning does not give citations and risks memorising PHI.
+- **Why LangChain / Hugging Face / FAISS?** LangChain: prompt templates (kept thin so core logic is testable plain Python). HF: open models and embeddings, local/private. FAISS: local, exact, reproducible, no server.
+- **Why hybrid + rerank?** Embeddings miss exact tokens (HbA1c, drug names, numbers); BM25 misses paraphrase; RRF merges both; the cross-encoder fixes ordering. Prove it with `--exp retrieval`.
+- **Why two sources?** Patient facts must come only from the report; definitions come from NIH/PubMed. Separate indices + tags prevent mixing them.
+- **Why Synthea/MedQuAD/PubMedQA?** Open, no credentialed access. Synthea is synthetic → state the generalisation gap; MIMIC is future work.
+- **Hallucination controls?** grounding, strict prompt, evidence gate, unanswerable detection, citation validation, numeric grounding check.
+- **How are citations made?** Context chunks are tagged [P#]/[K#]; the model cites tags; we map tags → metadata and pick the best supporting sentence. Correctness is evaluated against gold spans.
+- **How do you evaluate?** `evaluation/` — benchmark (100 manually verified Qs), ablations 1-8, error analysis by category.
+- **Contribution?** An empirical, reproducible study of which components improve factuality/traceability. No novelty claim without a literature review.
+- **Is it clinically safe?** No. It is an educational prototype; safety layer reduces, not eliminates, risk. Never claim otherwise.

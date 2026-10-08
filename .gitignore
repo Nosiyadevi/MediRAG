@@ -1,0 +1,15 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+venv/
+data/uploads/
+data/medquad/
+data/synthea/
+data/processed/
+data/reports/
+patient_vector_store/
+medical_vector_store/
+evaluation/results/*
+!evaluation/results/.gitkeep
+.pytest_cache/

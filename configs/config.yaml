@@ -1,0 +1,47 @@
+# Single source of truth for every experiment variable.
+paths:
+  data_dir: data
+  reports_dir: data/reports
+  uploads_dir: data/uploads
+  processed_dir: data/processed
+  benchmark_dir: data/benchmark
+  patient_store: patient_vector_store
+  medical_store: medical_vector_store
+  results_dir: evaluation/results
+
+embedding:
+  backend: sentence-transformers      # sentence-transformers | hashing (tests only)
+  model_name: BAAI/bge-small-en-v1.5
+  query_prefix: "Represent this sentence for searching relevant passages: "
+  batch_size: 32
+
+chunking:
+  chunk_tokens: 512          # approximated as 0.75 words per token
+  overlap_tokens: 64
+  medical_chunk_tokens: 384
+
+retrieval:
+  top_k_candidates: 20
+  top_k_final: 5
+  rrf_k: 60
+  # Evidence gate thresholds. MUST be calibrated on your benchmark
+  # (see evaluation/experiments.py --exp scores).
+  min_evidence_reranked: 0.02
+  min_evidence_cosine: 0.35
+
+reranker:
+  enabled: true
+  model_name: cross-encoder/ms-marco-MiniLM-L-6-v2
+
+llm:
+  backend: transformers      # transformers | hf_api | extractive
+  model_name: Qwen/Qwen2.5-1.5B-Instruct
+  hf_api_model: Qwen/Qwen2.5-7B-Instruct
+  max_new_tokens: 400
+  temperature: 0.0
+  load_in_4bit: false
+
+rewriting:
+  use_llm: false             # rule-based rewrite by default
+
+seed: 42
